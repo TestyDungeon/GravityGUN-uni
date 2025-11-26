@@ -25,8 +25,6 @@ public class PlayerMovement : MonoBehaviour, ICustomTriggerReceiver
     private void Awake()
     {
         movementController = GetComponent<MovementController>();
-        Cursor.visible = false;
-        Cursor.lockState = CursorLockMode.Locked;
     }
 
     private void Update()

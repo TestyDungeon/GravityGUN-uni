@@ -2,8 +2,10 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] private int maxHealth = 100;
-    private int currentHealth;
+    [SerializeField] protected int maxHealth = 100;
+    protected int currentHealth;
+    protected bool isAlive = true;
+    
 
     void Awake()
     {
@@ -16,18 +18,25 @@ public class Health : MonoBehaviour
         if (currentHealth <= 0)
             return;
         currentHealth -= damageAmount;
-        Debug.Log(currentHealth);
+        HealthChanged();
+        Debug.Log(name + " health: " + currentHealth);
 
-        if (currentHealth <= 0)
-            Die();
+        if (currentHealth <= 0 && isAlive)
+            OnDeath();
     }
 
     public void Heal(int healAmount)
     {
         currentHealth += Mathf.Clamp(healAmount, 0, maxHealth - currentHealth);
+        HealthChanged();
     }
 
-    private void Die()
+    virtual protected void HealthChanged()
+    {
+        
+    }
+
+    virtual protected void OnDeath()
     {
         Debug.Log(name + " died.");
         Destroy(gameObject);
