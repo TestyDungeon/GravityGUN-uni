@@ -5,6 +5,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] private Transform cameraPivot;
     [SerializeField] private Transform mountPoint;
     [SerializeField] private Item[] slots;
+    [SerializeField] private Item[] alwaysOnSlots;
     private int currentSlot = -1;
 
 
@@ -16,6 +17,12 @@ public class Inventory : MonoBehaviour
         {
             slots[i].player = gameObject;
             slots[i].cameraPivot = cameraPivot;
+        }
+
+        for (int i = 0; i < alwaysOnSlots.Length; i++)
+        {
+            alwaysOnSlots[i].player = gameObject;
+            alwaysOnSlots[i].cameraPivot = cameraPivot;
         }
 
     }

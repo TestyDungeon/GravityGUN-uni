@@ -17,9 +17,12 @@ public class EnemyChaseState : EnemyBaseState
     {
         enemy.UpdateLastPlayerPosition();
         Vector3 toPlayer = enemy.GetVectorToLastPlayerPosition();
-        
+
 
         enemy.GoInDirection(Vector3.ProjectOnPlane(enemy.GetVectorToLastPlayerPosition(), enemy.transform.up).normalized * enemy.chaseSpeed);
+        //Debug.Log("Angle: " + Vector3.SignedAngle(enemy.transform.forward, toPlayer, -enemy.transform.right));
+        if (Vector3.SignedAngle(enemy.transform.forward, toPlayer, -enemy.transform.right) > 45)
+            enemy.JumpTo(enemy.UpdateLastPlayerPosition());
         enemy.enemyAttack.SetDirection(toPlayer.normalized);
         
     }

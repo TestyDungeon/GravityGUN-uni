@@ -8,7 +8,9 @@ public class MovementController : MonoBehaviour, ICustomTriggerReceiver
     [SerializeField] private bool GravityEnabled = true;
     [SerializeField] private bool GlobalGravityEnabled = true;
     [SerializeField] private float gravity;
-    [SerializeField] private float gravityAlignSpeed = 0.05f;
+    private float gravityAlignSpeed = 0.05f;
+    [SerializeField] private float gravityAlignStep = 0.01f;
+    
     [SerializeField] private float maxClimbAngle = 55;
     private bool InGravityField = false;
     private int maxRecursion = 3;
@@ -21,7 +23,9 @@ public class MovementController : MonoBehaviour, ICustomTriggerReceiver
     Vector3 gravityVec = Vector3.down;
     Vector3 changedDir = Vector3.zero;
 
-    int layerMask = ~(1 << 3 | 1 << 6);
+    int layerMaskEnemy = ~(1 << 6);
+    int layerMaskPlayer = ~(1 << 3 | 1 << 6);
+    int layerMask;
 
     //public MovementController(Transform transform_, CapsuleCollider capsuleCollider_)
     //{
@@ -31,6 +35,14 @@ public class MovementController : MonoBehaviour, ICustomTriggerReceiver
 
     void Awake()
     {
+        if (tag == "Player")
+        {
+            layerMask = layerMaskPlayer;
+        }
+        else if (tag == "Enemy")
+        {
+            layerMask = layerMaskEnemy;
+        }
         capsuleCollider = GetComponent<CapsuleCollider>();
     }
 
@@ -38,7 +50,6 @@ public class MovementController : MonoBehaviour, ICustomTriggerReceiver
     {
         if (changedDir != Vector3.zero)
         {
-            Debug.Log("DIR CHANGE");
             velocity = changedDir * velocity.magnitude;
             changedDir = Vector3.zero;
         }
@@ -47,6 +58,9 @@ public class MovementController : MonoBehaviour, ICustomTriggerReceiver
             // 1. Apply gravity (acceleration integration)
             if (!InGravityField && GlobalGravityEnabled)
                 gravityVec = Vector3.down;
+            if (!InGravityField && !GlobalGravityEnabled)
+                gravityVec = Vector3.zero;
+                
             //if (InGravityField)
             velocity += gravityVec * gravity * Time.fixedDeltaTime;
 
@@ -146,7 +160,7 @@ public class MovementController : MonoBehaviour, ICustomTriggerReceiver
             pos + transform.up * (capsuleCollider.height / 2 - capsuleCollider.radius),
             pos - transform.up * (capsuleCollider.height / 2 - capsuleCollider.radius),
             capsuleCollider.radius, vel.normalized, out RaycastHit hit, dist,
-            layerMask, QueryTriggerInteraction.Ignore))
+            ~0, QueryTriggerInteraction.Ignore))
         {
 
             Vector3 newVel = vel.normalized * (hit.distance - offset);
@@ -174,7 +188,7 @@ public class MovementController : MonoBehaviour, ICustomTriggerReceiver
     {
         if (gravityAlignSpeed != 0.5)
         {
-            gravityAlignSpeed = Mathf.Lerp(gravityAlignSpeed, 0.5f, 0.01f);
+            gravityAlignSpeed = Mathf.Lerp(gravityAlignSpeed, 0.5f, gravityAlignStep);
         }
 
         Quaternion targetRotation = Quaternion.FromToRotation(transform.up, -gravityVec) * transform.rotation;
@@ -184,14 +198,14 @@ public class MovementController : MonoBehaviour, ICustomTriggerReceiver
     private void ResolvePenetration()
     {
 
-        Collider[] overlap = Physics.OverlapCapsule(transform.position + transform.up * 0.5f, transform.position - transform.up * 0.5f, 0.5f, 1, QueryTriggerInteraction.Ignore);
+        Collider[] overlap = Physics.OverlapCapsule(transform.position + transform.up * 0.5f, transform.position - transform.up * 0.5f, 0.5f, layerMask, QueryTriggerInteraction.Ignore);
         if (overlap.Length > 0)
         {
             foreach (Collider x in overlap)
             {
                 if (x == capsuleCollider)
                     continue;
-                Debug.Log(x.name + x);
+                //Debug.Log(x.name + x);
                 if (Physics.ComputePenetration(
                     capsuleCollider, transform.position, transform.rotation,
                     x, x.transform.position, x.transform.rotation,
@@ -241,6 +255,11 @@ public class MovementController : MonoBehaviour, ICustomTriggerReceiver
     public void resetVerticalVelocity()
     {
         externalVelocity -= Vector3.Project(vel, transform.up);
+    }
+
+    public void resetVelocity()
+    {
+        externalVelocity -= vel;
     }
 
     public void setGravityVec(Vector3 x)
