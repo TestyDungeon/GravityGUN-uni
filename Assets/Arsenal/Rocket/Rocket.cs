@@ -1,5 +1,3 @@
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Rocket : MonoBehaviour
@@ -40,17 +38,18 @@ public class Rocket : MonoBehaviour
             Destroy(particles, 2f);
             foreach (var obj in surrounding_objects)
             {
+                MovementController mc = obj.GetComponent<MovementController>();
                 Rigidbody rb = obj.GetComponent<Rigidbody>();
-                PlayerMovement player = obj.GetComponent<PlayerMovement>();
-                if (player != null)
+                if (mc != null)
                 {
-                    //player.set_vel(player.get_vel() + (0.2f * (obj.transform.position - transform.position).normalized * explosion_radius - (obj.transform.position - transform.position)));
-                    player.append_vel(explosionForce * (obj.transform.position - transform.position).normalized);
+                    mc.addVelocity(explosionForce * (obj.transform.position - transform.position).normalized);
                 }
+
                 if (obj.GetComponent<Health>() != null)
                 {
-                    Damage(obj.gameObject);
+                    Damage(obj.gameObject, damage);
                 }
+
                 if (rb != null)
                     rb.AddExplosionForce(explosionForce, transform.position, explosionRadius, 3, ForceMode.Impulse);
 
@@ -62,11 +61,11 @@ public class Rocket : MonoBehaviour
         }
     }
 
-    private void Damage(GameObject victim)
+    private void Damage(GameObject victim, int dmg)
     {
         if (victim.GetComponent<Health>() != null)
         {
-            victim.GetComponent<Health>().TakeDamage(damage);
+            victim.GetComponent<Health>().TakeDamage(dmg);
         }
     }
 
