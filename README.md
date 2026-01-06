@@ -1,7 +1,14 @@
-GravityGUN
+# GravityGUN
+## University project for Video Game Design
 
-Videos 👇
+## Collaborators
 
-[![Video](https://img.youtube.com/vi/JSOvJK3XEa0/0.jpg)](https://www.youtube.com/watch?v=JSOvJK3XEa0)
+- [@TestyDungeon](https://github.com/TestyDungeon) - Yurii
+- [@deftlie](https://github.com/deftlie) - Yauheni
+- [@Fenix085](https://github.com/Fenix085) - Volodymyr
+- [@KirbleSensei](https://github.com/KirbleSensei) - Emre
 
-[![Video](https://img.youtube.com/vi/q8byFZwCeK8/0.jpg)](https://www.youtube.com/watch?v=q8byFZwCeK8)
+
+Video 👇
+
+[![Video](https://img.youtube.com/vi/-AfGbeLKzk8/0.jpg)](https://www.youtube.com/watch?v=-AfGbeLKzk8)
