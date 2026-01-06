@@ -10,6 +10,4 @@
 - [@deftlie](https://github.com/deftlie) - Yauheni
 - [@Fenix085](https://github.com/Fenix085) - Volodymyr
 - [@KirbleSensei](https://github.com/KirbleSensei) - Emre
-
-
-
+- [@AlexeyArsentyev](https://github.com/AlexeyArsentyev) - Alexey
