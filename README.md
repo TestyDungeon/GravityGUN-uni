@@ -1,6 +1,11 @@
 # GravityGUN
 ## University project for Video Game Design
 
+
+## 💡 Overview
+
+First-person shooter prototype built with custom character controller that allows for dynamic gravity change.
+
 ## Video
 [![Video](https://img.youtube.com/vi/-AfGbeLKzk8/0.jpg)](https://www.youtube.com/watch?v=-AfGbeLKzk8)
 
